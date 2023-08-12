@@ -1,5 +1,9 @@
 # Glowing Pumpkin Xiao 5x5 BFF Server
 
+**Note:** This project abandoned because the Seeed Studio Xiao board doesn't support Wi-Fi 6 and that's what I have running on my home network. 
+
+***
+
 This is the [Glowing Pumpkin Xiao 5x5 BFF](https://github.com/johnwargo/glowing-pumpkin-xiao-bff) project with a web server added to you can control the app from a smartphone, tablet, of desktop PC. 
 
 ## Parts
