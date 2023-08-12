@@ -67,13 +67,17 @@ void Task1code(void* pvParameters) {
   Serial.print("Task1 running on core ");
   Serial.println(xPortGetCoreID());
 
-  //generate a random integer between 1 and 10
-  if ((int)random(11) > 8) {
-    // if it's a 9 or a 10, do that flicker thing
-    flicker();
-  } else {
-    // Otherwise switch to the new color
-    fadeColor(colors[(int)random(1, numColors + 1)]);
+  // Repeat the following infinitely
+  // because that's how this threading thing works.
+  for (;;) {
+    //generate a random integer between 1 and 10
+    if ((int)random(11) > 8) {
+      // if it's a 9 or a 10, do that flicker thing
+      flicker();
+    } else {
+      // Otherwise switch to the new color
+      fadeColor(colors[(int)random(1, numColors + 1)]);
+    }
   }
 }
 
