@@ -35,11 +35,9 @@ String header;
 TaskHandle_t Task1;
 TaskHandle_t Task2;
 
-// Current time
+// don't think I need this
 unsigned long currentTime = millis();
-// Previous time
 unsigned long previousTime = 0;
-// Define timeout time in milliseconds (example: 2000ms = 2s)
 const long timeoutTime = 2000;
 
 int numColors = 6;
@@ -49,15 +47,15 @@ CRGB leds[NUM_LEDS];
 
 void setup() {
   Serial.begin(115200);
-  delay(500);
-
+  delay(1000);
   // Initialize the FastLED library
   FastLED.addLeds<NEOPIXEL, PIN>(leds, NUM_LEDS);
-  delay(500);
   // Flash the lights RED twice
   flashLEDs(CRGB::Red, 2, 250);
-
+  delay(1000);
+  fadeColor(CRGB::Blue);
   // Connect to Wi-Fi network with SSID and password
+  Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
@@ -66,11 +64,13 @@ void setup() {
     Serial.print(".");
   }
   // Print local IP address and start web server
-  Serial.println("");
+  Serial.println();
   Serial.println("WiFi connected.");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   server.begin();
+
+  flashLEDs(CRGB::Blue, 3, 250);
 
   //create a task that will be executed in the Task1code() function, with priority 1 and executed on core 0
   xTaskCreatePinnedToCore(
