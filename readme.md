@@ -25,7 +25,7 @@ It took me a while to figure out how to orient the two devices when connecting t
 
 Attach the Wi-Fi antenna to the Xiao device as shown in the following figure:
 
-
+![](images/image-03.png)
 
 ## The Code
 
