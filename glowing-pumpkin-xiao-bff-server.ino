@@ -11,8 +11,6 @@
 **********************************************************/
 
 // https://randomnerdtutorials.com/esp32-dual-core-arduino-ide/
-// https://randomnerdtutorials.com/install-esp32-filesystem-uploader-arduino-ide/
-// https://randomnerdtutorials.com/esp32-web-server-spiffs-spi-flash-file-system/
 
 #include <FastLED.h>
 #include <WiFi.h>
