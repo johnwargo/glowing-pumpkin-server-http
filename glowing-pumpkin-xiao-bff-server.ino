@@ -22,28 +22,19 @@
 #define NUM_LEDS 25
 #define PIN A3
 
-// Replace with your network credentials
+// store the credentials in the project's constants.h file
 const char* ssid = WIFI_SSID;
 const char* password = WIFI_PASSWORD;
 
 // Set web server port number to 80
 WiFiServer server(80);
 
-// Variable to store the HTTP request
-String header;
-
 TaskHandle_t Task1;
 TaskHandle_t Task2;
 
-// don't think I need this
-unsigned long currentTime = millis();
-unsigned long previousTime = 0;
-const long timeoutTime = 2000;
-
 int numColors = 6;
 uint32_t colors[] = { CRGB::Blue, CRGB::Green, CRGB::Orange, CRGB::Purple, CRGB::Red, CRGB::Yellow };
-// LED Array (internal memory structure from FastLED)
-CRGB leds[NUM_LEDS];
+CRGB leds[NUM_LEDS];  // LED Array (internal memory structure from FastLED)
 
 void setup() {
   Serial.begin(115200);
