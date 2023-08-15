@@ -12,6 +12,7 @@ void Task0code(void* pvParameters) {
   Serial.println(xPortGetCoreID());
 
   // This is the worker code for the core, runs infinitely 
+  // listening for requests from the remote client
   for (;;) {
     WiFiClient client = server.available();  // Listen for incoming clients
     if (client) {                            // If a new client connects,

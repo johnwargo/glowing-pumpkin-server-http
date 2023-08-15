@@ -7,12 +7,12 @@
 **********************************************************/
 
 void Task1code(void* pvParameters) {
-  Serial.print("Task0 running on core ");
+  Serial.print("Task1 running on core ");
   Serial.println(xPortGetCoreID());
 
   // Repeat the following infinitely
   for (;;) {
-    if doRandom {
+    if (doRandom) {
       fadeColor(colors[(int)random(1, numColors + 1)]);
     }
   }

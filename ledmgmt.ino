@@ -2,9 +2,9 @@
 * LED Management
 * This is the code that controls what displays on the 
 * LED array.
-*/
+**********************************************************/
 
-bool doRandom = false;
+#include <FastLED.h>
 
 void enableRandom() {
   doRandom = true;
