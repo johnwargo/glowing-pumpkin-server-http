@@ -3,7 +3,7 @@
 * 
 * This is the code that executes on the first core in the 
 * ESP32. It's the web server code that responds to remote 
-* application requests
+* application requests.
 **********************************************************/
 
 void Task0code(void* pvParameters) {
