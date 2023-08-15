@@ -15,6 +15,9 @@ void disableRandom() {
 }
 
 void flashLEDs(CRGB color, int count, int duration) {
+  Serial.print("Flashing color ");
+  Serial.print(count);
+  Serial.println(" times");
   // Calculate this only once, no reason to calculate this in the loop
   int offDuration = duration / 2;
 
@@ -31,6 +34,9 @@ void flashLEDs(CRGB color, int count, int duration) {
 void flicker() {
   // how many times are we going to flash?
   int flashCount = (int)random(1, 6);
+  Serial.print("Flickering LEDs ");
+  Serial.print(flashCount);
+  Serial.println(" times");
   //flash the lights in white flashCount times
   //with a random duration and random delay between each flash
   for (int i = 0; i < flashCount; i++) {
@@ -49,6 +55,7 @@ void flicker() {
 
 // Fill the NeoPixel array with a specific color
 void fadeColor(CRGB c) {
+  Serial.println("Changing color");
   for (int i = 0; i < 25; i++) {
     leds[i] = c;
     FastLED.show();

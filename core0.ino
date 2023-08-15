@@ -30,5 +30,8 @@ void Task0code(void* pvParameters) {
       Serial.println("Client disconnected.");
       Serial.println();
     }
+    // Add a small delay to let the watchdog process
+    //https://stackoverflow.com/questions/66278271/task-watchdog-got-triggered-the-tasks-did-not-reset-the-watchdog-in-time
+    delay(25);
   }
 }
