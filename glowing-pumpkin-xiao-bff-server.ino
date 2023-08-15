@@ -15,7 +15,6 @@
 #include <FastLED.h>
 #include <WiFi.h>
 
-// Local constants
 #include "constants.h"
 
 #define DEBUG true
@@ -63,99 +62,14 @@ void setup() {
 
   flashLEDs(CRGB::Green, 3, 250);
 
-  //create a task that will be executed in the Task1code() function, with priority 1 and executed on core 0
-  xTaskCreatePinnedToCore(Task1code, "Task1", 10000, NULL, 1, &Task1, 0);
+  //create a task that executes the Task0code() function, with priority 1 and executed on core 0
+  xTaskCreatePinnedToCore(Task0code, "Task0", 10000, NULL, 1, &Task0, 0);
   delay(500);
-  //create a task that will be executed in the Task2code() function, with priority 1 and executed on core 1
-  xTaskCreatePinnedToCore(Task2code, "Task2", 10000, NULL, 1, &Task2, 1);
+  //create a task that executes the Task0code() function, with priority 1 and executed on core 1
+  xTaskCreatePinnedToCore(Task1code, "Task1", 10000, NULL, 1, &Task1, 1);
   delay(500);
 }
 
 void loop() {
   // nothing to do here, everything happens in the Tast1Code and Task2Code functions
-}
-
-void Task1code(void* pvParameters) {
-  Serial.print("Task1 running on core ");
-  Serial.println(xPortGetCoreID());
-
-  // Repeat the following infinitely
-  // because that's how this threading thing works.
-  for (;;) {
-    //generate a random integer between 1 and 10
-    if ((int)random(11) > 8) {
-      // if it's a 9 or a 10, do that flicker thing
-      flicker();
-    } else {
-      // Otherwise switch to the new color
-      fadeColor(colors[(int)random(1, numColors + 1)]);
-    }
-  }
-}
-
-void Task2code(void* pvParameters) {
-  Serial.print("Task2 running on core ");
-  Serial.println(xPortGetCoreID());
-
-  for (;;) {
-    WiFiClient client = server.available();  // Listen for incoming clients
-    if (client) {                            // If a new client connects,
-      Serial.println("Client connection");
-      client.println("HTTP/1.1 200 OK");
-      client.println("Content-type:text/html");
-      client.println("Connection: close");
-      client.println();
-      client.println("<!DOCTYPE html><html>");
-      client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"></head>");
-      client.println("<body><h1>ESP32 Web Server</h1>");
-      client.println("</body></html>");
-      client.println();
-      client.stop();
-      Serial.println("Client disconnected.");
-      Serial.println();
-    }
-  }
-}
-
-void flashLEDs(CRGB color, int count, int duration) {
-  // Calculate this only once, no reason to calculate this in the loop
-  int offDuration = duration / 2;
-
-  for (int i = 0; i < count; i++) {
-    fill_solid(leds, NUM_LEDS, CRGB::Red);
-    FastLED.show();
-    delay(duration);
-    fill_solid(leds, NUM_LEDS, CRGB::Black);
-    FastLED.show();
-    delay(offDuration);
-  }
-}
-
-void flicker() {
-  // how many times are we going to flash?
-  int flashCount = (int)random(1, 6);
-  //flash the lights in white flashCount times
-  //with a random duration and random delay between each flash
-  for (int i = 0; i < flashCount; i++) {
-    // Set all pixels to white and turn them on
-    fill_solid(leds, NUM_LEDS, CRGB::White);
-    FastLED.show();
-    // Delay for a random period of time (in milliseconds)
-    delay((int)random(50, 150));
-    //clear the lights (set the color to none)
-    fill_solid(leds, NUM_LEDS, CRGB::Black);
-    FastLED.show();
-    // Delay for a random period of time (in milliseconds)
-    delay((int)random(100, 500));
-  }
-}
-
-// Fill the NeoPixel array with a specific color
-void fadeColor(CRGB c) {
-  for (int i = 0; i < 25; i++) {
-    leds[i] = c;
-    FastLED.show();
-    delay(10);
-  }
-  delay((int)random(250, 2000));
 }
