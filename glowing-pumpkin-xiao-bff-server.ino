@@ -65,7 +65,7 @@ void setup() {
 
   // Flash LEDs green to let everyone know we successfully
   // connected to RWi-Fi
-  flashLEDs(CRGB::Green, 3);
+  flashLEDs(CRGB::Green, 2);
 
   //create a task that executes the Task0code() function, with priority 1 and executed on core 0
   xTaskCreatePinnedToCore(Task0code, "Task0", 10000, NULL, 1, &Task0, 0);

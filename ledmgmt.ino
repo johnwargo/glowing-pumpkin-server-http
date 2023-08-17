@@ -23,7 +23,7 @@ void flashLEDs(CRGB color, int count) {
   int offDuration = duration / 2;
 
   for (int i = 0; i < count; i++) {
-    fill_solid(leds, NUM_LEDS, CRGB::Red);
+    fill_solid(leds, NUM_LEDS, color);
     FastLED.show();
     delay(duration);
     fill_solid(leds, NUM_LEDS, CRGB::Black);
