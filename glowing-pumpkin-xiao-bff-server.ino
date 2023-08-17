@@ -42,24 +42,21 @@ WiFiServer server(80);
 void setup() {
   Serial.begin(115200);
   delay(1000);
+  Serial.println();
   // Initialize the FastLED library
   FastLED.addLeds<NEOPIXEL, PIN>(leds, NUM_LEDS);
-  // Flash the lights RED twice to let everyone know we've initiated
-  flashLEDs(CRGB::Red, 2);
-  delay(1000);
-  // Now turn all LEDs blue while we connect to the Wi-Fi network
-  fadeColor(CRGB::Blue);  
-  Serial.println();
+  flashLEDs(CRGB::Red, 2);  // Flash the lights RED twice to let everyone know we've initiated
   Serial.print("Connecting to ");
-  Serial.println(ssid);
+  Serial.println(ssid); 
+  fadeColor(CRGB::Blue);  // turn all LEDs blue while we connect to the Wi-Fi network
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
   Serial.println();
-  Serial.println("WiFi connected.");
-  Serial.println("IP address: ");
+  Serial.println("WiFi connected");
+  Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
   server.begin();
 
@@ -74,8 +71,7 @@ void setup() {
   xTaskCreatePinnedToCore(Task1code, "Task1", 10000, NULL, 1, &Task1, 1);
   delay(500);
 
-  // Start the random color display while we wait for requests to come in from the remote
-  // client.
+  // Start the random color display while we wait for requests to come in from the remote client.
   enableRandom();
 }
 

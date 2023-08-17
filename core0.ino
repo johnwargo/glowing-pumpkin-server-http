@@ -14,13 +14,12 @@
 // random -> Enable random colors
 
 void Task0code(void* pvParameters) {
+  // Only executes when registering the task on the core
+  Serial.print("Web Server running on core ");
+  Serial.println(xPortGetCoreID());
 
   String request;
   int color, count;
-
-  // Only executes when registering the task on the core
-  Serial.print("Task0 running on core ");
-  Serial.println(xPortGetCoreID());
 
   // This is the worker code for the core, runs infinitely
   // listening for requests from the remote client
@@ -29,55 +28,25 @@ void Task0code(void* pvParameters) {
     WiFiClient client = server.available();
     if (!client) return;
 
-    while (client.connected()) {
-      if (client.available()) {
-        char c = client.read();
-        request += c;
+    Serial.println("Client connection");
+    client.stop();
+    Serial.println("client disconnected");
 
-        if (c == '\n') {
-          if (request.indexOf("color") != -1) {
-            Serial.println("Color request");
-            color = 2;  // get the color
-            disableRandom();
-            fadeColor(colors[color]);
-          }
+    // while (client.connected()) {
+    //   if (client.available()) {
+    //     char c = client.read();
+    //     request += c;
 
-          if (request.indexOf("flash") != -1) {
-            // get the color
-            color = 2;
-            // get the number of flashes
-            count = 3;
-            Serial.print("Flash color #");
-            Serial.print(color);
-            Serial.print(", ");
-            Serial.print(count);
-            Serial.println(" times");
-            disableRandom();
-            flashLEDs(colors[color], count);
-            enableRandom();
-          }
+    //     if (c == '\n') {
+    //       Serial.println(request);
+    //       // close the connection:
+    //       client.stop();
+    //       Serial.println("client disconnected");
+    //     }
 
-          if (request.indexOf("lightning") != -1) {
-            Serial.println("Lightning");
-            disableRandom();
-            flicker();
-            enableRandom();
-          }
-
-          if (request.indexOf("off") != -1) {
-            Serial.println("Off");
-            disableRandom();
-            fadeColor(CRGB::Black);
-          }
-
-          if (request.indexOf("random") != -1) {
-            Serial.println("Random");
-            enableRandom();
-          }
-          break;
-        }
-      }
-    }
+    //     delay(25);
+    //   }
+    // }
     // Add a small delay to let the watchdog process
     //https://stackoverflow.com/questions/66278271/task-watchdog-got-triggered-the-tasks-did-not-reset-the-watchdog-in-time
     delay(25);
@@ -89,6 +58,53 @@ void success() {
 
 void error() {
 }
+
+
+
+// if (c == '\n') {
+//   if (request.indexOf("color") != -1) {
+//     Serial.println("Color request");
+//     color = 2;  // get the color
+//     disableRandom();
+//     fadeColor(colors[color]);
+//   }
+
+//   if (request.indexOf("flash") != -1) {
+//     // get the color
+//     color = 2;
+//     // get the number of flashes
+//     count = 3;
+//     Serial.print("Flash color #");
+//     Serial.print(color);
+//     Serial.print(", ");
+//     Serial.print(count);
+//     Serial.println(" times");
+//     disableRandom();
+//     flashLEDs(colors[color], count);
+//     enableRandom();
+//   }
+
+//   if (request.indexOf("lightning") != -1) {
+//     Serial.println("Lightning");
+//     disableRandom();
+//     flicker();
+//     enableRandom();
+//   }
+
+//   if (request.indexOf("off") != -1) {
+//     Serial.println("Off");
+//     disableRandom();
+//     fadeColor(CRGB::Black);
+//   }
+
+//   if (request.indexOf("random") != -1) {
+//     Serial.println("Random");
+//     enableRandom();
+//   }
+//   break;
+// }
+
+
 
 // // If a new client connects,
 // Serial.println("Client connection");

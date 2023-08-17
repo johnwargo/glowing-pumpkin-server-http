@@ -7,7 +7,7 @@
 **********************************************************/
 
 void Task1code(void* pvParameters) {
-  Serial.print("Task1 running on core ");
+  Serial.print("LED Management running on core ");
   Serial.println(xPortGetCoreID());
 
   // Repeat the following infinitely
