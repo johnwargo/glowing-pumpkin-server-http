@@ -72,7 +72,7 @@ void setup() {
   delay(500);
 
   // Start the random color display while we wait for requests to come in from the remote client.
-  enableRandom();
+  // enableRandom();
 }
 
 void loop() {

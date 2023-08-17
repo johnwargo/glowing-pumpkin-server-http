@@ -31,12 +31,62 @@ void Task0code(void* pvParameters) {
       while (client.connected()) {  // loop while the client's connected
         if (client.available()) {   // if there's bytes to read from the client,
           char c = client.read();   // read a byte, then
-          Serial.write(c);          // print it out the serial monitor
+          request += c;
+
           if (c == '\n') {
             Serial.println(request);
+            if (request.indexOf("GET /color:") >= 0) {
+              Serial.println("Color request");
+              color = 2;  // get the color
+              disableRandom();
+              fadeColor(colors[color]);
+              success(client);
+              break;
+            }
+
+            if (request.indexOf("GET /flash:") >= 0) {
+              // get the color
+              color = 2;
+              // get the number of flashes
+              count = 3;
+              Serial.print("Flash color #");
+              Serial.print(color);
+              Serial.print(", ");
+              Serial.print(count);
+              Serial.println(" times");
+              disableRandom();
+              flashLEDs(colors[color], count);
+              enableRandom();
+              success(client);
+              break;
+            }
+
+            if (request.indexOf("GET /lightning") >= 0) {
+              Serial.println("Lightning");
+              disableRandom();
+              flicker();
+              enableRandom();
+              success(client);
+              break;
+            }
+
+            if (request.indexOf("GET /off") >= 0) {
+              Serial.println("Off");
+              disableRandom();
+              fadeColor(CRGB::Black);
+              success(client);
+              break;
+            }
+
+            if (request.indexOf("GET /random") >= 0) {
+              Serial.println("Random");
+              enableRandom();
+              success(client);
+              break;
+            }
           }
-          delay(10);
-        }        
+        }
+        delay(10);
       }
       client.stop();
       Serial.println("client disconnected");
@@ -47,13 +97,15 @@ void Task0code(void* pvParameters) {
   }
 }
 
-void success() {
+void success(WiFiClient client) {
+  client.println("HTTP/1.1 200 OK");
+  client.println("Content-type:text/html");
+  client.println("Connection: close");
+  client.println();
 }
 
 void error() {
 }
-
-
 
 // if (c == '\n') {
 //   if (request.indexOf("color") != -1) {
