@@ -26,27 +26,21 @@ void Task0code(void* pvParameters) {
   for (;;) {
     // Listen for incoming clients
     WiFiClient client = server.available();
-    if (!client) return;
-
-    Serial.println("Client connection");
-    client.stop();
-    Serial.println("client disconnected");
-
-    // while (client.connected()) {
-    //   if (client.available()) {
-    //     char c = client.read();
-    //     request += c;
-
-    //     if (c == '\n') {
-    //       Serial.println(request);
-    //       // close the connection:
-    //       client.stop();
-    //       Serial.println("client disconnected");
-    //     }
-
-    //     delay(25);
-    //   }
-    // }
+    if (client) {
+      Serial.println("Client connection");
+      while (client.connected()) {  // loop while the client's connected
+        if (client.available()) {   // if there's bytes to read from the client,
+          char c = client.read();   // read a byte, then
+          Serial.write(c);          // print it out the serial monitor
+          if (c == '\n') {
+            Serial.println(request);
+          }
+          delay(10);
+        }        
+      }
+      client.stop();
+      Serial.println("client disconnected");
+    }
     // Add a small delay to let the watchdog process
     //https://stackoverflow.com/questions/66278271/task-watchdog-got-triggered-the-tasks-did-not-reset-the-watchdog-in-time
     delay(25);
