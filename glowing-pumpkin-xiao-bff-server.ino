@@ -45,7 +45,7 @@ void setup() {
   // Initialize the FastLED library
   FastLED.addLeds<NEOPIXEL, PIN>(leds, NUM_LEDS);
   // Flash the lights RED twice to let everyone know we've initiated
-  flashLEDs(CRGB::Red, 2, 250);
+  flashLEDs(CRGB::Red, 2);
   delay(1000);
   // Now turn all LEDs blue while we connect to the Wi-Fi network
   fadeColor(CRGB::Blue);  
@@ -65,7 +65,7 @@ void setup() {
 
   // Flash LEDs green to let everyone know we successfully
   // connected to RWi-Fi
-  flashLEDs(CRGB::Green, 3, 250);
+  flashLEDs(CRGB::Green, 3);
 
   //create a task that executes the Task0code() function, with priority 1 and executed on core 0
   xTaskCreatePinnedToCore(Task0code, "Task0", 10000, NULL, 1, &Task0, 0);

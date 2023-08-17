@@ -14,11 +14,12 @@ void disableRandom() {
   doRandom = false;
 }
 
-void flashLEDs(CRGB color, int count, int duration) {
+void flashLEDs(CRGB color, int count) {
   Serial.print("Flashing color ");
   Serial.print(count);
   Serial.println(" times");
-  // Calculate this only once, no reason to calculate this in the loop
+
+  int duration = 500;
   int offDuration = duration / 2;
 
   for (int i = 0; i < count; i++) {
@@ -55,7 +56,7 @@ void flicker() {
 
 // Fill the NeoPixel array with a specific color
 void fadeColor(CRGB c) {
-  Serial.println("Changing color");
+  // Serial.println("Changing color");
   for (int i = 0; i < 25; i++) {
     leds[i] = c;
     FastLED.show();
