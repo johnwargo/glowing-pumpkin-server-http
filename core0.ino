@@ -19,51 +19,66 @@ void Task0code(void* pvParameters) {
   Serial.println(xPortGetCoreID());
 
   String request, searchStr;
-  int color, count;
-  char tmpChar;
+  int color, colorPos, count;
 
   // This is the worker code for the core, runs infinitely
   // listening for requests from the remote client
   for (;;) {
-    request = ""; // empty this to eliminate previous responses
+    request = "";                            // empty this to eliminate previous responses
     WiFiClient client = server.available();  // Listen for incoming clients
     if (client) {
       Serial.println("Client connection");
       while (client.connected()) {  // loop while the client's connected
         if (client.available()) {   // if there's bytes to read from the client,
           char c = client.read();   // read a byte, then
-          request += c;
+          request += c;             // append it to the response variable
 
           if (c == '\n') {
             Serial.println(request);
+
+            // Color command
             searchStr = "GET /color:";
-            int colorPos = searchStr.length();
+            colorPos = searchStr.length();
             if (request.indexOf(searchStr) >= 0) {
-
-              tmpChar = request.charAt(colorPos);  // gets a char
-              Serial.print("tmpChar: ");
-              Serial.println(tmpChar);
-
-              color = tmpChar - '0';  // subtracts '0' from it to get the integer representation of the number
-
+              // subtracts '0' from it to get the integer representation of the number
+              color = request.charAt(colorPos) - '0';
               Serial.print("Set Color #");
               Serial.println(color);
+
+              if (color > numColors - 1) {  // invalid color idx
+                disableRandom();
+                fadeColor(CRGB::Black);
+                error(client);
+                break;
+              }
+
               disableRandom();
               fadeColor(colors[color]);
               success(client);
               break;
             }
 
-            if (request.indexOf("GET /flash:") >= 0) {
-              // get the color
-              color = 2;
+            // FLash command
+            searchStr = "GET /flash:";
+            colorPos = searchStr.length();
+            if (request.indexOf(searchStr) >= 0) {
+              // subtracts '0' from it to get the integer representation of the number
+              color = request.charAt(colorPos) - '0';
               // get the number of flashes
-              count = 3;
+              count = request.charAt(colorPos + 2) - '0';
               Serial.print("Flash color #");
               Serial.print(color);
               Serial.print(", ");
               Serial.print(count);
               Serial.println(" times");
+
+              if (color > numColors - 1) {  // invalid color idx
+                disableRandom();
+                fadeColor(CRGB::Black);
+                error(client);
+                break;
+              }
+
               disableRandom();
               flashLEDs(colors[color], count);
               enableRandom();
@@ -71,6 +86,7 @@ void Task0code(void* pvParameters) {
               break;
             }
 
+            // Lightning command
             if (request.indexOf("GET /lightning") >= 0) {
               Serial.println("Lightning");
               disableRandom();
@@ -80,6 +96,7 @@ void Task0code(void* pvParameters) {
               break;
             }
 
+            // Off command
             if (request.indexOf("GET /off") >= 0) {
               Serial.println("Off");
               disableRandom();
@@ -88,6 +105,7 @@ void Task0code(void* pvParameters) {
               break;
             }
 
+            // Random command
             if (request.indexOf("GET /random") >= 0) {
               Serial.println("Random");
               enableRandom();
@@ -118,66 +136,13 @@ void success(WiFiClient client) {
   client.println();
 }
 
-void error() {
+void error(WiFiClient client) {
   Serial.println("Sending Error response");
+  client.println("HTTP/1.1 400 Bad Request");
+  client.println("Content-Type: application/json");
+  client.println("Access-Control-Allow-Origin: *");
+  client.println("Connection: close");
+  client.println();
+  client.print("{ \"status\": \"failure\"}");
+  client.println();
 }
-
-// if (c == '\n') {
-//   if (request.indexOf("color") != -1) {
-//     Serial.println("Color request");
-//     color = 2;  // get the color
-//     disableRandom();
-//     fadeColor(colors[color]);
-//   }
-
-//   if (request.indexOf("flash") != -1) {
-//     // get the color
-//     color = 2;
-//     // get the number of flashes
-//     count = 3;
-//     Serial.print("Flash color #");
-//     Serial.print(color);
-//     Serial.print(", ");
-//     Serial.print(count);
-//     Serial.println(" times");
-//     disableRandom();
-//     flashLEDs(colors[color], count);
-//     enableRandom();
-//   }
-
-//   if (request.indexOf("lightning") != -1) {
-//     Serial.println("Lightning");
-//     disableRandom();
-//     flicker();
-//     enableRandom();
-//   }
-
-//   if (request.indexOf("off") != -1) {
-//     Serial.println("Off");
-//     disableRandom();
-//     fadeColor(CRGB::Black);
-//   }
-
-//   if (request.indexOf("random") != -1) {
-//     Serial.println("Random");
-//     enableRandom();
-//   }
-//   break;
-// }
-
-
-
-// // If a new client connects,
-// Serial.println("Client connection");
-// client.println("HTTP/1.1 200 OK");
-// client.println("Content-type:text/html");
-// client.println("Connection: close");
-// client.println();
-// client.println("<!DOCTYPE html><html>");
-// client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"></head>");
-// client.println("<body><h1>ESP32 Web Server</h1>");
-// client.println("</body></html>");
-// client.println();
-// client.stop();
-// Serial.println("Client disconnected.");
-// Serial.println();
