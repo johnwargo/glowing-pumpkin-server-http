@@ -58,10 +58,10 @@ void setup() {
   Serial.println("WiFi connected");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-  server.begin();
+  server.begin(); // start the web server
 
   // Flash LEDs green to let everyone know we successfully
-  // connected to RWi-Fi
+  // connected to Wi-Fi
   flashLEDs(CRGB::Green, 2);
 
   //create a task that executes the Task0code() function, with priority 1 and executed on core 0
@@ -70,9 +70,6 @@ void setup() {
   //create a task that executes the Task0code() function, with priority 1 and executed on core 1
   xTaskCreatePinnedToCore(Task1code, "Task1", 10000, NULL, 1, &Task1, 1);
   delay(500);
-
-  // Start the random color display while we wait for requests to come in from the remote client.
-  // enableRandom();
 }
 
 void loop() {

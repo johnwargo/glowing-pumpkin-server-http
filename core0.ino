@@ -18,14 +18,15 @@ void Task0code(void* pvParameters) {
   Serial.print("Web Server running on core ");
   Serial.println(xPortGetCoreID());
 
-  String request;
+  String request, searchStr;
   int color, count;
+  char tmpChar;
 
   // This is the worker code for the core, runs infinitely
   // listening for requests from the remote client
   for (;;) {
-    // Listen for incoming clients
-    WiFiClient client = server.available();
+    request = ""; // empty this to eliminate previous responses
+    WiFiClient client = server.available();  // Listen for incoming clients
     if (client) {
       Serial.println("Client connection");
       while (client.connected()) {  // loop while the client's connected
@@ -35,9 +36,18 @@ void Task0code(void* pvParameters) {
 
           if (c == '\n') {
             Serial.println(request);
-            if (request.indexOf("GET /color:") >= 0) {
-              Serial.println("Color request");
-              color = 2;  // get the color
+            searchStr = "GET /color:";
+            int colorPos = searchStr.length();
+            if (request.indexOf(searchStr) >= 0) {
+
+              tmpChar = request.charAt(colorPos);  // gets a char
+              Serial.print("tmpChar: ");
+              Serial.println(tmpChar);
+
+              color = tmpChar - '0';  // subtracts '0' from it to get the integer representation of the number
+
+              Serial.print("Set Color #");
+              Serial.println(color);
               disableRandom();
               fadeColor(colors[color]);
               success(client);
@@ -98,13 +108,18 @@ void Task0code(void* pvParameters) {
 }
 
 void success(WiFiClient client) {
+  Serial.println("Sending Success response");
   client.println("HTTP/1.1 200 OK");
-  client.println("Content-type:text/html");
+  client.println("Content-Type: application/json");
+  client.println("Access-Control-Allow-Origin: *");
   client.println("Connection: close");
+  client.println();
+  client.print("{ \"status\": \"success\"}");
   client.println();
 }
 
 void error() {
+  Serial.println("Sending Error response");
 }
 
 // if (c == '\n') {
