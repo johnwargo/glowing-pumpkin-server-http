@@ -46,8 +46,7 @@ void Task0code(void* pvParameters) {
               Serial.println(color);
 
               if (color > numColors - 1) {  // invalid color idx
-                disableRandom();
-                fadeColor(CRGB::Black);
+                allOff();
                 error(client);
                 break;
               }
@@ -73,8 +72,7 @@ void Task0code(void* pvParameters) {
               Serial.println(" times");
 
               if (color > numColors - 1) {  // invalid color idx
-                disableRandom();
-                fadeColor(CRGB::Black);
+                allOff();
                 error(client);
                 break;
               }
@@ -99,8 +97,7 @@ void Task0code(void* pvParameters) {
             // Off command
             if (request.indexOf("GET /off") >= 0) {
               Serial.println("Off");
-              disableRandom();
-              fadeColor(CRGB::Black);
+              allOff();
               success(client);
               break;
             }

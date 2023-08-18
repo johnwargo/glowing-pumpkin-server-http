@@ -64,3 +64,8 @@ void fadeColor(CRGB c) {
   }
   delay((int)random(250, 2000));
 }
+
+void allOff(){
+  disableRandom();
+  fadeColor(CRGB::Black);
+}
