@@ -54,6 +54,8 @@ void setup() {
   Serial.print("Connecting to ");
   Serial.println(ssid);
   fadeColor(CRGB::Blue);  // turn all LEDs blue while we connect to the Wi-Fi network
+
+  WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -73,12 +75,12 @@ void setup() {
   // connected to Wi-Fi
   flashLEDs(CRGB::Green, 2);
 
+  disableRandom();
+
   //create a task that executes the Task0code() function, with priority 1 and executed on core 0
   xTaskCreatePinnedToCore(Task0code, "Task0", 10000, NULL, 1, &Task0, 0);
-  delay(500);
   //create a task that executes the Task0code() function, with priority 1 and executed on core 1
   xTaskCreatePinnedToCore(Task1code, "Task1", 10000, NULL, 1, &Task1, 1);
-  delay(500);
 }
 
 void loop() {

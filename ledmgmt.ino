@@ -60,7 +60,9 @@ void flicker() {
 
 // Fill the NeoPixel array with a specific color
 void fadeColor(CRGB c) {
-  // Serial.println("Changing color");
+  Serial.print("Changing color (");
+  Serial.print(c);
+  Serial.println(")");
   for (int i = 0; i < 25; i++) {
     leds[i] = c;
     FastLED.show();

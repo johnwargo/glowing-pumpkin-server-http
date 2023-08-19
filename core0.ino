@@ -43,12 +43,12 @@ void Task0code(void* pvParameters) {
   server.on("/", handleRoot);
   server.on("/color", handleColor);
   server.on("/flash", handleFlash);
-  server.on("/lightning", flicker);
-  server.on("/off", allOff);
-  server.on("/random", enableRandom);
+  server.on("/lightning", handleFlicker);
+  server.on("/off", handleOff);
+  server.on("/random", handleRandom);
   server.onNotFound(handleNotFound);
   server.begin();
-  Serial.println("HTTP server started");
+  displayMessage("HTTP server started\n");
 
   for (;;) {
     server.handleClient();
@@ -58,16 +58,39 @@ void Task0code(void* pvParameters) {
 
 void handleColor() {
   displayMessage("Color");
+
+  sendSuccess();
 }
 
 void handleFlash() {
   displayMessage("Flash");
+
+  sendSuccess();
 }
 
+void handleFlicker() {
+  displayMessage("Flicker");
+  flicker();
+  sendSuccess();
+}
+
+void handleOff() {
+  displayMessage("Off");
+  allOff();
+  sendSuccess();
+}
+
+void handleRandom() {
+  displayMessage("Random");
+  enableRandom();
+  sendSuccess();
+}
+
+
 void handleRoot() {
-  displayMessage("Root (/)");
+  displayMessage("Root (/)\n");
   char temp[400];
-  snprintf(temp, 400, "<html><head><title>Redirecting</title><meta http-equiv='Refresh' content=\"10; url='https://pumpkin-controller.netlify.app'\" /></head><body><main><h1>Redirecting</h1><p>Redirecting to Pumpkin Controller<p></main></body></html>");
+  snprintf(temp, 400, "<html><head><title>Redirecting</title><meta http-equiv='Refresh' content=\"3; url='https://pumpkin-controller.netlify.app'\" /><link rel='stylesheet' href='https://unpkg.com/mvp.css'></head><body><main><h1>Redirecting</h1><p>Redirecting to Pumpkin Controller<p></main></body></html>");
   server.send(200, "text/html", temp);
 }
 
@@ -92,6 +115,15 @@ void displayMessage(String msg) {
   Serial.println(msg);
 }
 
+void sendSuccess() {
+  Serial.println("Sending Success response\n");
+  server.send(200, "application/json", "{ \"status\": \"success\"}");
+}
+
+void sendError() {
+  Serial.println("Sending Error response\n");
+  server.send(200, "application/json", "{ \"status\": \"failure\"}");
+}
 
 // String request, searchStr;
 //   int color, colorPos, count;
