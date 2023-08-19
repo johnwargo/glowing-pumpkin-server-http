@@ -12,6 +12,11 @@
 
 // https://randomnerdtutorials.com/esp32-dual-core-arduino-ide/
 
+// ESP32 Web Server CORS
+// https://stackoverflow.com/questions/65749873/how-to-add-cors-header-to-my-esp32-webserver
+// https://github.com/espressif/arduino-esp32/blob/master/libraries/WebServer/examples/AdvancedWebServer/AdvancedWebServer.ino
+// https://github.com/espressif/arduino-esp32/blob/master/libraries/ESPmDNS/src/ESPmDNS.h
+
 #include <FastLED.h>
 #include <WiFi.h>
 
@@ -40,6 +45,9 @@ CRGB leds[NUM_LEDS];  // LED Array (internal memory structure from FastLED)
 WiFiServer server(80);
 
 void setup() {
+
+  int counter = 0;
+
   Serial.begin(115200);
   delay(1000);
   Serial.println();
@@ -47,18 +55,23 @@ void setup() {
   FastLED.addLeds<NEOPIXEL, PIN>(leds, NUM_LEDS);
   flashLEDs(CRGB::Red, 2);  // Flash the lights RED twice to let everyone know we've initiated
   Serial.print("Connecting to ");
-  Serial.println(ssid); 
+  Serial.println(ssid);
   fadeColor(CRGB::Blue);  // turn all LEDs blue while we connect to the Wi-Fi network
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
+    counter += 1;
+    if (counter > 25) {
+      counter = 0;
+      Serial.println();
+    }
   }
   Serial.println();
   Serial.println("WiFi connected");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-  server.begin(); // start the web server
+  server.begin();  // start the web server
 
   // Flash LEDs green to let everyone know we successfully
   // connected to Wi-Fi

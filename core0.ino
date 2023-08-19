@@ -77,9 +77,7 @@ void Task0code(void* pvParameters) {
                 break;
               }
 
-              disableRandom();
               flashLEDs(colors[color], count);
-              enableRandom();
               success(client);
               break;
             }
@@ -87,9 +85,7 @@ void Task0code(void* pvParameters) {
             // Lightning command
             if (request.indexOf("GET /lightning") >= 0) {
               Serial.println("Lightning");
-              disableRandom();
               flicker();
-              enableRandom();
               success(client);
               break;
             }
@@ -126,7 +122,7 @@ void success(WiFiClient client) {
   Serial.println("Sending Success response");
   client.println("HTTP/1.1 200 OK");
   client.println("Content-Type: application/json");
-  client.println("Access-Control-Allow-Origin: *");
+  client.println("Access-Control-Allow-Origin: *");  
   client.println("Connection: close");
   client.println();
   client.print("{ \"status\": \"success\"}");
