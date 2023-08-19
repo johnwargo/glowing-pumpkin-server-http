@@ -40,36 +40,70 @@ void Task0code(void* pvParameters) {
   }
 
   server.enableCORS();
-  server.on("/", handleRoot);
-  server.on("/color", handleColor);
-  server.on("/flash", handleFlash);
-  server.on("/lightning", handleFlicker);
-  server.on("/off", handleOff);
-  server.on("/random", handleRandom);
+  server.on("/", HTTP_GET, handleRoot);
+  server.on("/color", HTTP_GET, handleColor);
+  server.on("/flash", HTTP_GET, handleFlash);
+  server.on("/lightning", HTTP_GET, handleFlicker);
+  server.on("/off", HTTP_GET, handleOff);
+  server.on("/random", HTTP_GET, handleRandom);
   server.onNotFound(handleNotFound);
   server.begin();
   displayMessage("HTTP server started\n");
 
   for (;;) {
     server.handleClient();
+    // Add a small delay to let the watchdog process
+    //https://stackoverflow.com/questions/66278271/task-watchdog-got-triggered-the-tasks-did-not-reset-the-watchdog-in-time
     delay(10);
   }
 }
 
 void handleColor() {
   displayMessage("Color");
+  int color;
 
+  color = 3;
+
+  if (color > numColors - 1) {  // invalid color idx
+    allOff();
+    sendError();
+return;
+  }
+
+  disableRandom();
+  fadeColor(colors[color]);
   sendSuccess();
 }
 
+// Two Parameters:
+//   number of flashes
+//   color index
 void handleFlash() {
-  displayMessage("Flash");
 
+  int color, count;
+
+  displayMessage("Flash");
+  color = 3;
+  count = 5;
+
+  Serial.print("Flash color #");
+  Serial.print(color);
+  Serial.print(", ");
+  Serial.print(count);
+  Serial.println(" times");
+
+  if (color > numColors - 1) {  // invalid color idx
+    allOff();
+    sendError();
+    return;
+  }
+
+  flashLEDs(colors[color], count);
   sendSuccess();
 }
 
 void handleFlicker() {
-  displayMessage("Flicker");
+  displayMessage("Flicker");  // lightning
   flicker();
   sendSuccess();
 }
@@ -225,26 +259,3 @@ void sendError() {
 //     //https://stackoverflow.com/questions/66278271/task-watchdog-got-triggered-the-tasks-did-not-reset-the-watchdog-in-time
 //     delay(25);
 //   }
-
-
-// void success(WiFiClient client) {
-//   Serial.println("Sending Success response");
-//   client.println("HTTP/1.1 200 OK");
-//   client.println("Content-Type: application/json");
-//   client.println("Access-Control-Allow-Origin: *");
-//   client.println("Connection: close");
-//   client.println();
-//   client.print("{ \"status\": \"success\"}");
-//   client.println();
-// }
-
-// void error(WiFiClient client) {
-//   Serial.println("Sending Error response");
-//   client.println("HTTP/1.1 400 Bad Request");
-//   client.println("Content-Type: application/json");
-//   client.println("Access-Control-Allow-Origin: *");
-//   client.println("Connection: close");
-//   client.println();
-//   client.print("{ \"status\": \"failure\"}");
-//   client.println();
-// }
