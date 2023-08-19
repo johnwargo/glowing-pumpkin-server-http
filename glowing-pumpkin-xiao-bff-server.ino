@@ -12,16 +12,12 @@
 
 // https://randomnerdtutorials.com/esp32-dual-core-arduino-ide/
 
-// ESP32 Web Server CORS
-// https://stackoverflow.com/questions/65749873/how-to-add-cors-header-to-my-esp32-webserver
-// https://github.com/espressif/arduino-esp32/blob/master/libraries/WebServer/examples/AdvancedWebServer/AdvancedWebServer.ino
-// https://github.com/espressif/arduino-esp32/blob/master/libraries/ESPmDNS/src/ESPmDNS.h
-
 #include <FastLED.h>
 #include <WiFi.h>
 
 #include "constants.h"
 
+#define HOSTNAME "pumpkin"
 #define DEBUG true
 #define NUM_LEDS 25
 #define PIN A3
@@ -42,7 +38,7 @@ uint32_t colors[] = { CRGB::Blue, CRGB::Green, CRGB::Orange, CRGB::Purple, CRGB:
 CRGB leds[NUM_LEDS];  // LED Array (internal memory structure from FastLED)
 
 // Set web server port number to 80
-WiFiServer server(80);
+// WiFiServer server(80);
 
 void setup() {
 
@@ -71,7 +67,6 @@ void setup() {
   Serial.println("WiFi connected");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-  server.begin();  // start the web server
 
   // Flash LEDs green to let everyone know we successfully
   // connected to Wi-Fi
