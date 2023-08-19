@@ -35,7 +35,7 @@ void flashLEDs(CRGB color, int count) {
 }
 
 void flicker() {
-   disableRandom();
+  disableRandom();
   // how many times are we going to flash?
   int flashCount = (int)random(1, 6);
   Serial.print("Flickering LEDs ");
@@ -69,7 +69,7 @@ void fadeColor(CRGB c) {
   delay((int)random(250, 2000));
 }
 
-void allOff(){
+void allOff() {
   disableRandom();
   fadeColor(CRGB::Black);
 }

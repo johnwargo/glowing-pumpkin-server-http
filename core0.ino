@@ -20,11 +20,11 @@
 
 #include <ESPmDNS.h>
 #include <WebServer.h>
-// #include <WiFiClient.h>
 
 WebServer server(80);
 
 void Task0code(void* pvParameters) {
+
   Serial.print("Web Server running on core ");
   Serial.println(xPortGetCoreID());
 
@@ -39,8 +39,13 @@ void Task0code(void* pvParameters) {
     }
   }
 
-  server.enableCORS();  
+  server.enableCORS();
   server.on("/", handleRoot);
+  server.on("/color", handleColor);
+  server.on("/flash", handleFlash);
+  server.on("/lightning", flicker);
+  server.on("/off", allOff);
+  server.on("/random", enableRandom);
   server.onNotFound(handleNotFound);
   server.begin();
   Serial.println("HTTP server started");
@@ -51,19 +56,23 @@ void Task0code(void* pvParameters) {
   }
 }
 
-void displayMessage(String msg) {
-  Serial.print("Web server: ");
-  Serial.println(msg);
+void handleColor() {
+  displayMessage("Color");
+}
+
+void handleFlash() {
+  displayMessage("Flash");
 }
 
 void handleRoot() {
-  displayMessage("processing / request");
+  displayMessage("Root (/)");
   char temp[400];
-  snprintf(temp, 400, "<html><head><title>Redirecting</title><meta http-equiv='Refresh' content=\"10; url='https://pumpkin-controller.netlify.app/'\" /></head><body><main><h1>Redirecting</h1><p>Redirecting to Pumpkin Controller<p></main></body></html>");
+  snprintf(temp, 400, "<html><head><title>Redirecting</title><meta http-equiv='Refresh' content=\"10; url='https://pumpkin-controller.netlify.app'\" /></head><body><main><h1>Redirecting</h1><p>Redirecting to Pumpkin Controller<p></main></body></html>");
   server.send(200, "text/html", temp);
 }
 
 void handleNotFound() {
+  displayMessage("Not Found");
   String message = "File Not Found\n\n";
   message += "URI: ";
   message += server.uri();
@@ -72,13 +81,17 @@ void handleNotFound() {
   message += "\nArguments: ";
   message += server.args();
   message += "\n";
-
   for (uint8_t i = 0; i < server.args(); i++) {
     message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
   }
-
   server.send(404, "text/plain", message);
 }
+
+void displayMessage(String msg) {
+  Serial.print("Web server: ");
+  Serial.println(msg);
+}
+
 
 // String request, searchStr;
 //   int color, colorPos, count;

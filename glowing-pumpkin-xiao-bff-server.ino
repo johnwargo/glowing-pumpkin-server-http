@@ -14,6 +14,7 @@
 
 #include <FastLED.h>
 #include <WiFi.h>
+#include <WiFiClient.h>
 
 #include "constants.h"
 
