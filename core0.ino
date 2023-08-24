@@ -11,6 +11,9 @@
 // https://github.com/espressif/arduino-esp32/blob/master/libraries/WebServer/examples/AdvancedWebServer/AdvancedWebServer.ino
 // https://github.com/espressif/arduino-esp32/blob/master/libraries/ESPmDNS/src/ESPmDNS.h
 
+// path args
+// https://github.com/espressif/arduino-esp32/blob/master/libraries/WebServer/examples/PathArgServer/PathArgServer.ino
+
 // Commands:
 // color:# -> disable random colors and set the LED matrix to the selected color
 // flash:#x:#y -> disable random colors, flash the lights using the selected color (#x) #y times, enable random colors
