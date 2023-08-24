@@ -60,12 +60,11 @@ void Task0code(void* pvParameters) {
     server.handleClient();
     // Add a small delay to let the watchdog process
     //https://stackoverflow.com/questions/66278271/task-watchdog-got-triggered-the-tasks-did-not-reset-the-watchdog-in-time
-    delay(10);
+    delay(25);
   }
 }
 
 void handleColor() {
-
   int color;
   String colorStr = server.pathArg(0);
   displayMessage("color: " + colorStr);
@@ -84,23 +83,12 @@ void handleColor() {
 
 
 void handleFlash() {
-  // Two Parameters:
-  //   number of flashes
-  //   color index
-
   int color, count;
   String uriParms = server.pathArg(0);
   displayMessage("flash: " + uriParms);
 
-  displayMessage("Flash");
-  color = 3;
-  count = 5;
-
-  Serial.print("Flash color #");
-  Serial.print(color);
-  Serial.print(", ");
-  Serial.print(count);
-  Serial.println(" times");
+  color = uriParms.charAt(0) - '0';
+  count = uriParms.charAt(2) - '0';
 
   if (color > numColors - 1) {  // invalid color idx
     allOff();
