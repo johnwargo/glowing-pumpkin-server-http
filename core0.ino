@@ -24,6 +24,9 @@
 #include <ESPmDNS.h>
 #include <WebServer.h>
 
+#include <uri/UriBraces.h>
+// #include <uri/UriRegex.h>
+
 WebServer server(80);
 
 void Task0code(void* pvParameters) {
@@ -44,8 +47,8 @@ void Task0code(void* pvParameters) {
 
   server.enableCORS();
   server.on("/", handleRoot);
-  server.on("/color", handleColor);
-  server.on("/flash", handleFlash);
+  server.on(UriBraces("/color:{}"), handleColor);
+  server.on(UriBraces("/flash:{}"), handleFlash);
   server.on("/lightning", handleFlicker);
   server.on("/off", handleOff);
   server.on("/random", handleRandom);
@@ -62,11 +65,12 @@ void Task0code(void* pvParameters) {
 }
 
 void handleColor() {
-  displayMessage("Color");
+
   int color;
+  String colorStr = server.pathArg(0);
+  displayMessage("color: " + colorStr);
 
-  color = 3;
-
+  color = colorStr.toInt();
   if (color > numColors - 1) {  // invalid color idx
     allOff();
     sendError();
@@ -78,12 +82,15 @@ void handleColor() {
   sendSuccess();
 }
 
-// Two Parameters:
-//   number of flashes
-//   color index
+
 void handleFlash() {
+  // Two Parameters:
+  //   number of flashes
+  //   color index
 
   int color, count;
+  String uriParms = server.pathArg(0);
+  displayMessage("flash: " + uriParms);
 
   displayMessage("Flash");
   color = 3;
