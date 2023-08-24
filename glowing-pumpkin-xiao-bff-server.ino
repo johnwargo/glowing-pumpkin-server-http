@@ -48,14 +48,12 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
   Serial.println();
-  // Initialize the FastLED library
-  FastLED.addLeds<NEOPIXEL, PIN>(leds, NUM_LEDS);
-  flashLEDs(CRGB::Red, 2);  // Flash the lights RED twice to let everyone know we've initiated
+  FastLED.addLeds<NEOPIXEL, PIN>(leds, NUM_LEDS);  // Initialize the FastLED library
+  flashLEDs(CRGB::Red, 2);                         // Flash the lights RED twice to let everyone know we've initiated
   Serial.print("Connecting to ");
   Serial.println(ssid);
   fadeColor(CRGB::Blue);  // turn all LEDs blue while we connect to the Wi-Fi network
 
-  WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);

@@ -2,6 +2,13 @@
 
 This is the [Glowing Pumpkin Xiao 5x5 BFF](https://github.com/johnwargo/glowing-pumpkin-xiao-bff) project with a web server added to you can control the app from a smartphone, tablet, of desktop PC. 
 
+## Tasks
+
+- [ ] Parse Color command paramater
+- [ ] Parse Flash command parameter
+- [ ] Pass ip address to pumpkin controller on redirect
+- [ ] 
+
 ## Parts
 
 For this project, I used:

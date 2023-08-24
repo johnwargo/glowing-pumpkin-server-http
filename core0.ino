@@ -40,12 +40,12 @@ void Task0code(void* pvParameters) {
   }
 
   server.enableCORS();
-  server.on("/", HTTP_GET, handleRoot);
-  server.on("/color", HTTP_GET, handleColor);
-  server.on("/flash", HTTP_GET, handleFlash);
-  server.on("/lightning", HTTP_GET, handleFlicker);
-  server.on("/off", HTTP_GET, handleOff);
-  server.on("/random", HTTP_GET, handleRandom);
+  server.on("/", handleRoot);
+  server.on("/color", handleColor);
+  server.on("/flash", handleFlash);
+  server.on("/lightning", handleFlicker);
+  server.on("/off", handleOff);
+  server.on("/random", handleRandom);
   server.onNotFound(handleNotFound);
   server.begin();
   displayMessage("HTTP server started\n");
@@ -67,7 +67,7 @@ void handleColor() {
   if (color > numColors - 1) {  // invalid color idx
     allOff();
     sendError();
-return;
+    return;
   }
 
   disableRandom();
@@ -129,7 +129,7 @@ void handleRoot() {
 }
 
 void handleNotFound() {
-  displayMessage("Not Found");
+  displayMessage("Not Found\n");
   String message = "File Not Found\n\n";
   message += "URI: ";
   message += server.uri();
