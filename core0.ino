@@ -120,10 +120,14 @@ void handleRandom() {
 
 
 void handleRoot() {
+  // Send the a web page with a redirect to the hosted pumpin controller.
+  // https://pumpkin-controller.netlify.app/
+  // append the IP address of the server so the app can configure itself
+  // and save the IP address for future access.
   displayMessage("Root (/)\n");
-  char temp[400];
-  snprintf(temp, 400, "<html><head><title>Redirecting</title><meta http-equiv='Refresh' content=\"3; url='https://pumpkin-controller.netlify.app'\" /><link rel='stylesheet' href='https://unpkg.com/mvp.css'></head><body><main><h1>Redirecting</h1><p>Redirecting to Pumpkin Controller<p></main></body></html>");
-  server.send(200, "text/html", temp);
+  String redirectHTML = "<html><head><title>Redirecting</title><meta http-equiv='Refresh' content=\"3; url='https://pumpkin-controller.netlify.app?" + WiFi.localIP().toString() + "'\" /><link rel='stylesheet' href='https://unpkg.com/mvp.css'></head><body><main><h1>Redirecting</h1><p>Redirecting to Pumpkin Controller<p></main></body></html>";
+  Serial.println(redirectHTML);
+  server.send(200, "text/html", redirectHTML);
 }
 
 void handleNotFound() {
