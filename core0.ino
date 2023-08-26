@@ -25,7 +25,6 @@
 #include <WebServer.h>
 
 #include <uri/UriBraces.h>
-// #include <uri/UriRegex.h>
 
 WebServer server(80);
 
@@ -75,10 +74,10 @@ void handleColor() {
     sendError();
     return;
   }
+  sendSuccess();
 
   disableRandom();
   fadeColor(colors[color]);
-  sendSuccess();
 }
 
 
@@ -91,42 +90,54 @@ void handleFlash() {
   count = uriParms.charAt(2) - '0';
 
   if (color > numColors - 1) {  // invalid color idx
-    allOff();
     sendError();
+    allOff();
+
     return;
   }
 
-  flashLEDs(colors[color], count);
+  if (count > 5) {  // invalid count
+    sendError();
+    allOff();
+    return;
+  }
+
   sendSuccess();
+  flashLEDs(colors[color], count);
 }
 
 void handleFlicker() {
   displayMessage("Flicker");  // lightning
-  flicker();
   sendSuccess();
+  flicker();
 }
 
 void handleOff() {
   displayMessage("Off");
-  allOff();
   sendSuccess();
+  allOff();
 }
 
 void handleRandom() {
   displayMessage("Random");
-  enableRandom();
   sendSuccess();
+  enableRandom();
 }
 
 
 void handleRoot() {
   // Send the a web page with a redirect to the hosted pumpin controller.
   // https://pumpkin-controller.netlify.app/
-  // append the IP address of the server so the app can configure itself
+  // Append the IP address of the server so the app can configure itself
   // and save the IP address for future access.
   displayMessage("Root (/)\n");
-  String redirectHTML = "<html><head><title>Redirecting</title><meta http-equiv='Refresh' content=\"3; url='https://pumpkin-controller.netlify.app?" + WiFi.localIP().toString() + "'\" /><link rel='stylesheet' href='https://unpkg.com/mvp.css'></head><body><main><h1>Redirecting</h1><p>Redirecting to Pumpkin Controller<p></main></body></html>";
-  Serial.println(redirectHTML);
+  String redirectHTML = "<html>";
+  redirectHTML += "<head><title>Redirecting</title>";
+  redirectHTML += "<meta http-equiv='Refresh' content=\"3; url='https://pumpkin-controller.netlify.app?" + WiFi.localIP().toString() + "'\" />";
+  redirectHTML += "<link rel='stylesheet' href='https://unpkg.com/mvp.css'>";
+  redirectHTML += "</head><body><main>";
+  redirectHTML += "<h1>Redirecting</h1><p>Redirecting to Pumpkin Controller<p>";
+  redirectHTML += "</main></body></html>";
   server.send(200, "text/html", redirectHTML);
 }
 
@@ -152,11 +163,11 @@ void displayMessage(String msg) {
 }
 
 void sendSuccess() {
-  Serial.println("Sending Success response\n");
   server.send(200, "application/json", "{ \"status\": \"success\"}");
+  Serial.println("Sent Success response\n");
 }
 
 void sendError() {
-  Serial.println("Sending Error response\n");
-  server.send(200, "application/json", "{ \"status\": \"failure\"}");
+  server.send(400, "application/json", "{ \"status\": \"failure\"}");
+  Serial.println("Sent Error response\n");
 }

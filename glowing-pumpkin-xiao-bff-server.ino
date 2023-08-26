@@ -14,7 +14,6 @@
 
 #include <FastLED.h>
 #include <WiFi.h>
-#include <WiFiClient.h>
 
 #include "constants.h"
 
@@ -37,9 +36,6 @@ bool doRandom = false;
 int numColors = 6;
 uint32_t colors[] = { CRGB::Blue, CRGB::Green, CRGB::Orange, CRGB::Purple, CRGB::Red, CRGB::Yellow };
 CRGB leds[NUM_LEDS];  // LED Array (internal memory structure from FastLED)
-
-// Set web server port number to 80
-// WiFiServer server(80);
 
 void setup() {
 
