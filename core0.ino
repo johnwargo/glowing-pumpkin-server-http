@@ -33,9 +33,6 @@ void Task0code(void* pvParameters) {
   Serial.print("Web Server running on core ");
   Serial.println(xPortGetCoreID());
 
-  Serial.println(HTTP_GET);
-  Serial.println(HTTP_PUT);
-
   if (MDNS.begin(HOSTNAME)) {
     displayMessage("MDNS responder started");
     MDNS.addService("http", "tcp", 80);
@@ -70,8 +67,12 @@ void handleColor() {
   int color;
   String colorStr = server.pathArg(0);
 
+  // Only accept GET requests, this addresses a problem caused by
+  // CORS preflight check requests that the web server library
+  // doesn't deal with correctly (OK, not at all)
   if (server.method() != HTTP_GET) return;
   displayMessage("color: " + colorStr);
+
   color = colorStr.toInt();
   if (color > numColors - 1) {  // invalid color idx
     allOff();
@@ -79,7 +80,6 @@ void handleColor() {
     return;
   }
   sendSuccess();
-
   disableRandom();
   fadeColor(colors[color]);
 }
@@ -89,29 +89,28 @@ void handleFlash() {
   int color, count;
   String uriParms = server.pathArg(0);
 
+  // Only accept GET requests, this addresses a problem caused by
+  // CORS preflight check requests that the web server library
+  // doesn't deal with correctly (OK, not at all)
   if (server.method() != HTTP_GET) return;
   displayMessage("flash: " + uriParms);
+
   color = uriParms.charAt(0) - '0';
   count = uriParms.charAt(2) - '0';
-
-  if (color > numColors - 1) {  // invalid color idx
-    sendError();
-    allOff();
-
-    return;
-  }
-
-  if (count > 5) {  // invalid count
+  // invalid color idx or count
+  if (color > numColors - 1 || count > 5) {
     sendError();
     allOff();
     return;
   }
-
   sendSuccess();
   flashLEDs(colors[color], count);
 }
 
 void handleFlicker() {
+  // Only accept GET requests, this addresses a problem caused by
+  // CORS preflight check requests that the web server library
+  // doesn't deal with correctly (OK, not at all)
   if (server.method() != HTTP_GET) return;
   displayMessage("Flicker");  // lightning
   sendSuccess();
@@ -119,6 +118,9 @@ void handleFlicker() {
 }
 
 void handleOff() {
+  // Only accept GET requests, this addresses a problem caused by
+  // CORS preflight check requests that the web server library
+  // doesn't deal with correctly (OK, not at all)
   if (server.method() != HTTP_GET) return;
   displayMessage("Off");
   sendSuccess();
@@ -126,6 +128,9 @@ void handleOff() {
 }
 
 void handleRandom() {
+  // Only accept GET requests, this addresses a problem caused by
+  // CORS preflight check requests that the web server library
+  // doesn't deal with correctly (OK, not at all)
   if (server.method() != HTTP_GET) return;
   displayMessage("Random");
   sendSuccess();
