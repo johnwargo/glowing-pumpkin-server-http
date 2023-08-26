@@ -138,7 +138,7 @@ void handleRandom() {
 }
 
 void handleRoot() {
-  // Send the a web page with a redirect to the hosted pumpin controller.
+  // Send the a web page with a redirect to the hosted pumpkin controller.
   // https://pumpkin-controller.netlify.app/
   // Append the IP address of the server so the app can configure itself
   // and save the IP address for future access.
