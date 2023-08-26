@@ -33,6 +33,9 @@ void Task0code(void* pvParameters) {
   Serial.print("Web Server running on core ");
   Serial.println(xPortGetCoreID());
 
+  Serial.println(HTTP_GET);
+  Serial.println(HTTP_PUT);
+
   if (MDNS.begin(HOSTNAME)) {
     displayMessage("MDNS responder started");
     MDNS.addService("http", "tcp", 80);
@@ -66,8 +69,9 @@ void Task0code(void* pvParameters) {
 void handleColor() {
   int color;
   String colorStr = server.pathArg(0);
-  displayMessage("color: " + colorStr);
 
+  if (server.method() != HTTP_GET) return;
+  displayMessage("color: " + colorStr);
   color = colorStr.toInt();
   if (color > numColors - 1) {  // invalid color idx
     allOff();
@@ -84,8 +88,9 @@ void handleColor() {
 void handleFlash() {
   int color, count;
   String uriParms = server.pathArg(0);
-  displayMessage("flash: " + uriParms);
 
+  if (server.method() != HTTP_GET) return;
+  displayMessage("flash: " + uriParms);
   color = uriParms.charAt(0) - '0';
   count = uriParms.charAt(2) - '0';
 
@@ -107,23 +112,25 @@ void handleFlash() {
 }
 
 void handleFlicker() {
+  if (server.method() != HTTP_GET) return;
   displayMessage("Flicker");  // lightning
   sendSuccess();
   flicker();
 }
 
 void handleOff() {
+  if (server.method() != HTTP_GET) return;
   displayMessage("Off");
   sendSuccess();
   allOff();
 }
 
 void handleRandom() {
+  if (server.method() != HTTP_GET) return;
   displayMessage("Random");
   sendSuccess();
   enableRandom();
 }
-
 
 void handleRoot() {
   // Send the a web page with a redirect to the hosted pumpin controller.
@@ -157,18 +164,19 @@ void handleNotFound() {
   server.send(404, "text/plain", message);
 }
 
-void displayMessage(String msg) {
-  Serial.print("Web server: ");
-  Serial.println(msg);
-}
-
 void sendSuccess() {
-  Serial.println(server.method());
   server.send(200, "application/json", "{ \"status\": \"success\"}");
-  Serial.println("Sent Success response\n");
+  // displayMessage("Sent Success response");
 }
 
 void sendError() {
   server.send(400, "application/json", "{ \"status\": \"failure\"}");
-  Serial.println("Sent Error response\n");
+  displayMessage("Sent Error response\n");
+}
+
+void displayMessage(String msg) {
+#ifdef DEBUG
+  Serial.print("Web server: ");
+  Serial.println(msg);
+#endif
 }

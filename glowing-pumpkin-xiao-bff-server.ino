@@ -17,8 +17,8 @@
 
 #include "constants.h"
 
+#define DEBUG
 #define HOSTNAME "pumpkin"
-#define DEBUG true
 #define NUM_LEDS 25
 #define PIN A3
 
@@ -44,11 +44,26 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
   Serial.println();
-  FastLED.addLeds<NEOPIXEL, PIN>(leds, NUM_LEDS);  // Initialize the FastLED library
-  flashLEDs(CRGB::Red, 2);                         // Flash the lights RED twice to let everyone know we've initiated
+
+  // Initialize the FastLED library
+  FastLED.addLeds<NEOPIXEL, PIN>(leds, NUM_LEDS);
+
+  // Check to make sure we have Wi-Fi credentials
+  // before trying to use them
+  if (String(ssid).isEmpty() || String(password).isEmpty()) {
+    Serial.println("Missing Wi-Fi credentials");
+    setColor(CRGB::Red);
+    for (;;) {}
+  }
+
+  // flash to let everyone know we're up
+  flashLEDs(CRGB::Green, 2);  // Flash the lights twice to let everyone know we've initiated
+  delay(500);
+
+  // connect to the Wi-Fi network
   Serial.print("Connecting to ");
   Serial.println(ssid);
-  fadeColor(CRGB::Blue);  // turn all LEDs blue while we connect to the Wi-Fi network
+  setColor(CRGB::Blue);  // turn all LEDs blue while we connect to the Wi-Fi network
 
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
