@@ -163,6 +163,7 @@ void displayMessage(String msg) {
 }
 
 void sendSuccess() {
+  Serial.println(server.method());
   server.send(200, "application/json", "{ \"status\": \"success\"}");
   Serial.println("Sent Success response\n");
 }
