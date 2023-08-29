@@ -23,8 +23,9 @@
 
 #include <ESPmDNS.h>
 #include <WebServer.h>
-
 #include <uri/UriBraces.h>
+
+#define HOSTNAME "pumpkin"
 
 WebServer server(80);
 

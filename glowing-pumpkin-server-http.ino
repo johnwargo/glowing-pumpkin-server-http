@@ -18,7 +18,6 @@
 #include "constants.h"
 
 #define DEBUG
-#define HOSTNAME "pumpkin"
 #define NUM_LEDS 25
 #define PIN A3
 
