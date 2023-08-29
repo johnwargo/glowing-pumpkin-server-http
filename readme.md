@@ -4,6 +4,13 @@ This is the [Glowing Pumpkin Xiao 5x5 BFF](https://github.com/johnwargo/glowing-
 
 Documentation forthcoming.
 
+Web app URL
+how to use
+Limitations
+
+Mobile app link
+
+
 ## The Code
 
 The code is pretty straight forward and installs like any other Arduino sketch. I'm not going to explain that here. 
