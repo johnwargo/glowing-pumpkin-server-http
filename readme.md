@@ -4,6 +4,10 @@ This is the [Glowing Pumpkin Xiao 5x5 BFF](https://github.com/johnwargo/glowing-
 
 I decided to add a web server and controller app to the original project not because its the right thing to do, but because I wanted to learn how to do it. Specifically I wanted to learn how to run the web server on a separate processor core than the other code in the sketch as I described in [Arduino ESP32 Web Server on a Processor Core](https://johnwargo.com/posts/2023/arduino-esp32-web-server-on-a-processor-core/). The parent project runs on a [Seeed Studio Xiao ESP32 device](https://www.seeedstudio.com/xiao-series-page) with a [5x5 NeoPixel array](https://www.adafruit.com/product/5646). You can use any other device and LED configuration if you want using this project as a starting point, but the web server is specific to the ESP32 device family, so that limits your microcontroller options. 
 
+Here's the project (and the mobile app) in action:
+
+[![](images/thumbnail.jpg)](https://youtube.com/shorts/f4Zdm71U4CE)
+
 ## The API
 
 The API exposed through the web server looks like this:
