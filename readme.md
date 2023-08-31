@@ -26,6 +26,8 @@ The API exposed through the web server looks like this:
 
 You can control the LEDs on the ESP32 device using a web application. I published a sample app in [Glowing Pumpkin Controller](https://github.com/johnwargo/glowing-pumpkin-controller-html/tree/main) and its hosted publicly on Netlify at [https://pumpkin-controller.netlify.app/](https://pumpkin-controller.netlify.app/). You can use it to control the LEDs from a desktop browser, but it won't work with a mobile browser (its a long story, I'll publish a blog post about it on [https://johnwargo.com](https://johnwargo.com) soon). 
 
+![COnnection Diagram](images/connection.png)
+
 The app looks like this:
 
 ![Pumpkin Controller Web Application](images/pumpkin-controller-web.png)
