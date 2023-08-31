@@ -6,7 +6,7 @@ I decided to add a web server and controller app to the original project not bec
 
 Here's the project (and the mobile app) in action:
 
-[![](images/thumbnail.jpg)](https://youtube.com/shorts/f4Zdm71U4CE)
+[![](images/thumbnail.jpg)](https://youtube.com/shorts/BMP7LUCIwN0)
 
 ## The API
 
