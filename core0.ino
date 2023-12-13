@@ -85,7 +85,6 @@ void handleColor() {
   fadeColor(colors[color]);
 }
 
-
 void handleFlash() {
   int color, count;
   String uriParms = server.pathArg(0);
